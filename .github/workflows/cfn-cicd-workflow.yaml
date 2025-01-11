@@ -1,15 +1,23 @@
+---
 name: AWS CloudFormation Deployment
-
-on:
-  workflow_dispatch
-
+on: workflow_dispatch
 jobs:
-  deploy:
-    name: Deploy CloudFormation Stack
+  setup-repo:
+    name: Setup Repo
     runs-on: ubuntu-latest
-
     steps:
-      # Step 1: Checkout Code
       - name: Checkout Code
         run: |
           echo "Checkout code."
+  validate-code:
+    needs: setup-repo
+    name: Validate Template
+    runs-on: ubuntu-latest
+    steps:
+      - name: CloudFormation Validate
+        run: |
+          echo "CloudFormation Validate"
+          
+      - name: Run Checkov Scan
+        run: |
+          echo "Run Checkov Scan"
