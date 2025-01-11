@@ -2,7 +2,7 @@
 name: CI/CD Pipeline for CloudFormation
 
 on:
-  workflow_call:
+  workflow_dispatch:
     # inputs:
     #   deploy-reviewer-test:
     #     description: Specifies the GitHub User Id who can approve test deployment.
