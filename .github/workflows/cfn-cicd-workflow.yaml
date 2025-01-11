@@ -1,5 +1,5 @@
 ---
-name: CI/CD Pipeline for Terraform
+name: CI/CD Pipeline for CloudFormation
 
 on:
   workflow_call:
