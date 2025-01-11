@@ -3,23 +3,23 @@ name: CI/CD Pipeline for Terraform
 
 on:
   workflow_call:
-    inputs:
-      deploy-reviewer-test:
-        description: Specifies the GitHub User Id who can approve test deployment.
-        required: true
-        type: number
-      deploy-reviewer-prod:
-        description: Specifies the GitHub User Id who can approve prod deployment.
-        required: true
-        type: number
-      pr-approver:
-        description: Specifies the GitHub User who can approve a Pull Request.
-        required: true
-        type: string
-    secrets:
-      git-token:
-        required: true
-        description: 'Specifies the GitHub Token for the repository.'
+    # inputs:
+    #   deploy-reviewer-test:
+    #     description: Specifies the GitHub User Id who can approve test deployment.
+    #     required: true
+    #     type: number
+    #   deploy-reviewer-prod:
+    #     description: Specifies the GitHub User Id who can approve prod deployment.
+    #     required: true
+    #     type: number
+    #   pr-approver:
+    #     description: Specifies the GitHub User who can approve a Pull Request.
+    #     required: true
+    #     type: string
+    # secrets:
+    #   git-token:
+    #     required: true
+    #     description: 'Specifies the GitHub Token for the repository.'
 
 permissions:
   id-token: write                       # This is required for aws oidc connection
@@ -29,29 +29,55 @@ permissions:
 
 jobs:
   _1-setup:
-    uses: subhamay-bhattacharyya/gh-action-reusable-aws-cfn-wf/.github/workflows/setup-repository.yaml@main
-    with:
-      deploy-reviewer-test: ${{ inputs.deploy-reviewer-test }}
-      deploy-reviewer-prod: ${{ inputs.deploy-reviewer-prod }}
-      pr-approver: ${{ inputs.pr-approver }}
-      test-env: true
-      prod-env: true
-    secrets:
-      git-token: ${{ secrets.git-token }}
+    name: Setup Repository
+    runs-on: ubuntu-latest
+    
+    steps:
+      # Step 1: Checkout Code
+      - name: Job 1 - Step 1
+        run: |
+          echo "Hello World !"
+          
+    # uses: subhamay-bhattacharyya/gh-action-reusable-aws-cfn-wf/.github/workflows/setup-repository.yaml@main
+    # with:
+    #   deploy-reviewer-test: ${{ inputs.deploy-reviewer-test }}
+    #   deploy-reviewer-prod: ${{ inputs.deploy-reviewer-prod }}
+    #   pr-approver: ${{ inputs.pr-approver }}
+    #   test-env: true
+    #   prod-env: true
+    # secrets:
+    #   git-token: ${{ secrets.git-token }}
 
   _2-1-1-cfn-validate:
+    name: Validate CloudFormation Template
+    runs-on: ubuntu-latest
     needs:
       - _1-setup
-    if: startsWith(github.ref, 'refs/heads/feature')
-    uses: subhamay-bhattacharyya/gh-action-reusable-aws-cfn-wf/.github/workflows/cfn-validate.yaml@main
-    with:
-      issue-number: ${{ github.run_id }}
+    steps:
+      # Step 1: Checkout Code
+      - name: Job 2 - Step 1
+        run: |
+          echo "Hello World !"
+          
+    # if: startsWith(github.ref, 'refs/heads/feature')
+    # uses: subhamay-bhattacharyya/gh-action-reusable-aws-cfn-wf/.github/workflows/cfn-validate.yaml@main
+    # with:
+    #   issue-number: ${{ github.run_id }}
 
   _2-1-2-checkov-scan:
+    name: Checkov Scan
+    runs-on: ubuntu-latest
     needs:
       - _1-setup
-    if: startsWith(github.ref, 'refs/heads/feature')
-    uses: subhamay-bhattacharyya/gh-action-reusable-aws-cfn-wf//.github/workflows/checkov-scan.yaml@main
+
+    steps:
+      # Step 1: Checkout Code
+      - name: Job 3 - Step 1
+        run: |
+          echo "Hello World !" 
+          
+    # if: startsWith(github.ref, 'refs/heads/feature')
+    # uses: subhamay-bhattacharyya/gh-action-reusable-aws-cfn-wf//.github/workflows/checkov-scan.yaml@main
 
   # _2-2-tf-plan-devl:
   #   if: github.ref == 'refs/heads/main'
